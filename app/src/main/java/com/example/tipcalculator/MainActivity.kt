@@ -6,10 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -22,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import java.text.NumberFormat
@@ -48,7 +44,9 @@ class MainActivity : ComponentActivity() {
 fun TipCalculatorScreen() {
     var serviceCostAmountInput by remember { mutableStateOf("") }
     val amount = serviceCostAmountInput.toDoubleOrNull() ?: 0.0
-    val tip = calculateTip(amount)
+    var tipAmount by remember { mutableStateOf("") }
+    val randomBill = GenerateRandomBill()
+
     Column(
         modifier = Modifier.padding(32.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -60,19 +58,44 @@ fun TipCalculatorScreen() {
         )
         Spacer(Modifier.height(16.dp))
 
+        Button(onClick = { serviceCostAmountInput = randomBill.toString() }) {
+            Text(text = stringResource(R.string.tip_calculator_button))
+        }
 
-
+        Spacer(Modifier.height(16.dp))
         EditServiceCostField(
             value = serviceCostAmountInput,
             onValueChange = { serviceCostAmountInput = it }
         )
+
         Spacer(Modifier.height(24.dp))
+        Row{
+            Button(onClick = { tipAmount = calculateTip(10.0, amount) }, modifier = Modifier.padding(end = 8.dp)) {
+                Text(text = stringResource(R.string.tip_percent_1))
+            }
+            Button(onClick = { tipAmount = calculateTip(15.0, amount) }, modifier = Modifier.padding(start = 8.dp)) {
+                Text(text = stringResource(R.string.tip_percent_2))
+            }
+        }
+        Row {
+            Button(onClick = { tipAmount = calculateTip(18.0, amount) }, modifier = Modifier.padding(end = 8.dp)) {
+                Text(text = stringResource(R.string.tip_percent_3))
+            }
+            Button(onClick = { tipAmount = calculateTip(20.0, amount) }, modifier = Modifier.padding(start = 8.dp)) {
+                Text(text = stringResource(R.string.tip_percent_4))
+            }
+        }
+
+
+
+
         Text(
-            text = stringResource(R.string.tip_amount, tip),
+            text = stringResource(R.string.tip_amount, tipAmount),
             modifier = Modifier.align(Alignment.CenterHorizontally),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
+
     }
 }
 
@@ -93,19 +116,19 @@ fun EditServiceCostField(
     )
 }
 
-private fun calculateTip(
-    amount: Double,
-    tipPercent: Double = 15.0
+private fun calculateTip(tipPercent: Double,
+    amount: Double
 ): String {
     val tip = tipPercent / 100 * amount
     return NumberFormat.getCurrencyInstance().format(tip)
 }
 
-@Composable
-fun GenerateRandomBill() {
+
+private fun GenerateRandomBill(): Int {
     val random = (1..100).random()
-    Text(text = "Bill: $random")
+    return random
 }
+
 
 
 @Preview(showBackground = true)

@@ -3,6 +3,8 @@
     <string name="tip_calculator_heading">Calculate Tip</string>
     <string name="service_cost">Cost of Service</string>
     <string name="tip_amount">Tip Amount %s</string>
+    <string name="bill_amount">Bill Amount %s</string>
+    <string name="total_amount">Total Amount %s</string>
     <string name="tip_calculator_button">Generate Random Bill</string>
     <string name="tip_percent_1">10%</string>
     <string name="tip_percent_2">15%</string>
